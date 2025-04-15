@@ -87,4 +87,5 @@ class ClientController extends Controller
 
         return view('clients.vehicules', compact('client', 'vehicules'));
     }
+
 }
