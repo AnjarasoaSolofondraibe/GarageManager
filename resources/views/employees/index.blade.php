@@ -20,10 +20,10 @@
         <tbody>
             @foreach($employees as $e)
             <tr>
-                <td>{{ $e->first_name }} {{ $e->last_name }}</td>
+                <td>{{ $e->prenom }} {{ $e->nom }}</td>
                 <td>{{ $e->email }}</td>
-                <td>{{ $e->position }}</td>
-                <td>{{ $e->hired_at }}</td>
+                <td>{{ $e->poste }}</td>
+                <td>{{ \Carbon\Carbon::parse($e->date_embauche)->format('d M Y') }}</td>
                 <td>
                     <a href="{{ route('employees.edit', $e) }}" class="btn btn-sm btn-primary">Modifier</a>
                     <form action="{{ route('employees.destroy', $e) }}" method="POST" class="d-inline">

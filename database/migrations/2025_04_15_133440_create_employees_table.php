@@ -20,6 +20,7 @@ class CreateEmployeesTable extends Migration
             $table->string('email')->unique();
             $table->string('telephone')->nullable();
             $table->string('adresse')->nullable();
+            $table->string('poste');
             $table->date('date_embauche');
             $table->decimal('salaire', 10, 2)->nullable();
             $table->boolean('status')->default(true);

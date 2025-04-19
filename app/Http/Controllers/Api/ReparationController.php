@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Vehicule;
 use App\Models\Reparation;
 use App\Models\Employee;
@@ -13,20 +14,14 @@ class ReparationController extends Controller
     public function vehiculeReparations(Vehicule $vehicule)
     {
         $reparations = $vehicule->reparations; // si la relation est bien définie
-        return view('reparations.vehicule', compact('vehicule', 'reparations'));
+        return response()->json($reparations);
     }
 
     public function index()
     {
         $vehicule = Vehicule::with('reparations.mecaniciens')->all();
-        return view('reparations.index', compact('vehicule'));
-    }
-
-    public function create()
-    {
-        $vehicules = Vehicule::with('client')->orderBy('immatriculation')->get();
-        $mecaniciens = Employee::where('poste', 'Mécanicien')->get();
-        return view('reparations.create', compact('vehicules', 'mecaniciens'));
+        
+        return response()->json($vehicule);
     }
 
     public function store(Request $request)
@@ -44,13 +39,13 @@ class ReparationController extends Controller
         return redirect()->route('reparations.index')->with('success', 'Réparation enregistrée.');
     }
 
-    public function edit($id)
+    public function showEmployee($id)
     {
-        $reparation = Reparation::with('mecaniciens')->findOrFail($id);
-        $vehicules = Vehicule::all(); // si tu veux permettre de changer le véhicule
-        $mecaniciens = Mecanicien::all();
+        $reparation = Reparation::with('employée')->whereHas('employee', function($query) {
+            $query->whereIn('poste',['mecanicien','electricien','peintre','tolier']);
+        })->get();
 
-        return view('reparations.edit', compact('reparation', 'vehicules', 'mecaniciens'));
+        return response()->json($reparation);
     }
 
     public function update(Request $request, $id)
@@ -81,7 +76,7 @@ class ReparationController extends Controller
             $query->where('etat', 'en cours');
         }])->get();
 
-        return view('reparations.en_cours', compact('vehicules'));
+        return response()->json($vehicules);
     }
 
     

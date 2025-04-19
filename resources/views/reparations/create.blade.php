@@ -35,16 +35,21 @@
             <textarea name="description" class="form-control" required>{{ old('description') }}</textarea>
         </div>
 
-        <label for="mecaniciens">Mécaniciens assignés</label>
-        <select name="mecaniciens[]" id="mecaniciens" multiple class="form-control">
-            @foreach ($mecaniciens as $mecanicien)
-                <option value="{{ $mecanicien->id }}">{{ $mecanicien->nom }}</option>
-            @endforeach
-        </select>
+        <div class="mb-3">
+            <label for="mecanicien" class="form-label">Mécanicien</label>
+            <select name="mecaniciens[]" multiple class="form-control" required>
+                @foreach($mecaniciens as $mecanicien)
+                    <option value="{{ $mecanicien->id }}">
+                        {{ $mecanicien->nom }}
+                    </option>
+                @endforeach
+            </select>
+            <small>Maintenez Ctrl ou Cmd pour sélectionner plusieurs</small>
+        </div>
 
 
         <div class="mb-3">
-            <label for="cout" class="form-label">Coût (€)</label>
+            <label for="cout" class="form-label">Coût (Ariary)</label>
             <input type="number" step="0.01" name="cout" class="form-control" value="{{ old('cout') }}" required>
         </div>
 
@@ -53,8 +58,8 @@
             <input type="date" name="date" class="form-control" value="{{ old('date') ?? date('Y-m-d') }}" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        <a href="{{ route('clients.index') }}" class="btn btn-secondary">Annuler</a>
+        <button type="submit" class="btn btn-primary">Créer la réparation</button>
+        <a href="{{ route('reparations.index') }}" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 @endsection

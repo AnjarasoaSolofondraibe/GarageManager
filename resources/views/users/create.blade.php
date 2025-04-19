@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2>Modifier utilisateur</h2>
+    <h2>Créer un nouvel utilisateur</h2>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -15,18 +15,17 @@
         </div>
     @endif
 
-    <form action="{{ route('users.update', $users->id ) }}" method="POST">
+    <form action="{{ route('users.store') }}" method="POST">
         @csrf
-        @method('PUT');
 
         <div class="mb-3">
             <label for="name" class="form-label">Nom complet</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+            <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label">Adresse email</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
         </div>
 
         <div class="mb-3">
@@ -40,16 +39,16 @@
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Nouveau mot de passe (laisser vide si inchangé)</label>
-            <input type="password" name="password" class="form-control">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" name="password" class="form-control" required>
         </div>
 
         <div class="mb-3">
             <label for="password_confirmation" class="form-label">Confirmer le mot de passe</label>
-            <input type="password" name="password_confirmation" class="form-control">
+            <input type="password" name="password_confirmation" class="form-control" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="submit" class="btn btn-primary">Créer</button>
         <a href="{{ route('users.index') }}" class="btn btn-secondary">Annuler</a>
     </form>
 </div>

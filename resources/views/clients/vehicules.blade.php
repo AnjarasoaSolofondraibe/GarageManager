@@ -29,7 +29,7 @@
                         <td>{{ $vehicule->immatriculation }}</td>
                         <td>{{ $vehicule->annee }}</td>
                         <td>{{ $vehicule->couleur }}</td>
-                        <td><a href="{{ route('vehicules.reparations', $vehicule) }}" class="btn btn-sm btn-outline-dark">
+                        <td><a href="{{ route('vehicules.reparations', $vehicule->id) }}" class="btn btn-sm btn-outline-dark">
                             🔧 Réparations
                         </a></td>
                     </tr>
