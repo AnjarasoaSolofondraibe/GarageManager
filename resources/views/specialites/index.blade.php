@@ -21,13 +21,13 @@
             @forelse($specialites as $specialite)
                 <tr>
                     <td>{{ $specialite->nom }}</td>
-                    <td>
-                        <a href="{{ route('specialites.edit', $specialite) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <td style="width:150px;text-align:center;">
+                        <a href="{{ route('specialites.edit', $specialite) }}" class="btn btn-outline-warning btn-sm">✏️</a>
 
                         <form action="{{ route('specialites.destroy', $specialite) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Confirmer la suppression ?')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm">🗑️</button>
                         </form>
                     </td>
                 </tr>

@@ -37,11 +37,11 @@
                     <td>{{ $client->telephone }}</td>
                     <td>{{ $client->email }}</td>
                     <td>{{ $client->adresse }}</td>
-                    <td>
+                    <td style="width:140px;text-align:center;">
                       
 
                         <!-- Bouton Voir véhicules -->
-                        <a href="{{ route('clients.vehicules', $client) }}" class="btn btn-info btn-sm">🚗 Voir les véhicules</a>
+                        <a href="{{ route('clients.vehicules', $client) }}" class="btn btn-outline-info btn-sm">🚗</a>
 
                         <!-- Modal pour les véhicules du client -->
                         <div class="modal fade" id="vehiculesModal{{ $client->id }}" tabindex="-1" aria-labelledby="vehiculesModalLabel{{ $client->id }}" aria-hidden="true">
@@ -87,7 +87,7 @@
                                         <form action="{{ route('clients.destroy', $client) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">🗑️ Confirmer la suppression</button>
+                                            <button type="submit" class="btn btn-danger">🗑️ Supprimer</button>
                                         </form>
                                     @else
                                         <div class="alert alert-warning mb-0 w-100 text-start">
@@ -101,11 +101,11 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('clients.edit', $client) }}" class="btn btn-sm btn-warning">✏️ Modifier</a>
+                        <a href="{{ route('clients.edit', $client) }}" class="btn btn-sm btn-outline-warning">✏️</a>
 
                         <!-- Bouton qui ouvre la modale de confirmation -->
-                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#vehiculesModal{{ $client->id }}">
-                            🗑️ Supprimer
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#vehiculesModal{{ $client->id }}">
+                            🗑️
                         </button>
                     </td>
                 </tr>

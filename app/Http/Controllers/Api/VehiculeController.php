@@ -12,7 +12,7 @@ class VehiculeController extends Controller
     {
         $vehicules = Vehicule::all();
 
-        return response()->json($vehicules);
+        return response()->json($vehicules, 200);
     }
 
     public function store(Request $request)
@@ -26,19 +26,29 @@ class VehiculeController extends Controller
             'couleur' => 'nullable|string|max:50',
         ]);
 
-        return Vehicule::create($data);
+        $vehicule = Vehicule::create($data);
+
+        return response()->json($vehicule, 201);
     }
 
     public function show($id)
     {
         $vehicule = Vehicule::findOrFail($id);
 
-        return response()->json($vehicule);
+        if(!$vehicule) {
+            return response()->json(['message' => 'Vehicule non trouvé'], 404);
+        }
+
+        return response()->json($vehicule, 200);
     }
 
     public function update(Request $request, $id)
     {
         $vehicule = Vehicule::findOrFail($id);
+
+        if(!$vehicule) {
+            return response()->json(['message' => 'Vehicule non trouvé'], 404);
+        }
 
         $data = $request->validate([
             'client_id' => 'required|exists:clients,id',
@@ -51,14 +61,19 @@ class VehiculeController extends Controller
 
         $vehicule->update($data);
 
-        return $vehicule;
+        return response()->json($vehicule, 200);
     }
 
     public function destroy($id)
     {
         $vehicule = Vehicule::findOrFail($id);
+
+        if(!$vehicule) {
+            return response()->json(['message' => 'Vehicule non trouvé'], 404);
+        }
+
         $vehicule->delete();
 
-        return response()->json(['message' => 'Véhicule supprimé']);
+        return response()->json(['message' => 'Véhicule supprimé'], 200);
     }
 }

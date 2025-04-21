@@ -18,6 +18,6 @@ class Reparation extends Model
 
     public function mecaniciens()
     {
-        return $this->belongsToMany(Employee::class);
+        return $this->belongsToMany(Employe::class, 'employe_reparation');
     }
 }

@@ -48,16 +48,17 @@
                     <td>{{ $vehicule->modele }}</td>
                     <td>{{ $vehicule->immatriculation }}</td>
                     <td>{{ $vehicule->annee }}</td>
-                    <td>
-                        <a href="{{ route('vehicules.edit', $vehicule) }}" class="btn btn-sm btn-warning">✏️ Modifier</a>
+                    <td style="width:150px;text-align:center;">
+                        <a href="{{ route('vehicules.reparations', $vehicule->id) }}" class="btn btn-sm btn-outline-primary">🔧</a>
+                        <a href="{{ route('vehicules.edit', $vehicule) }}" class="btn btn-sm btn-outline-warning">✏️</a>
                         <!-- Bouton de suppression -->
                         <button 
-                            class="btn btn-sm btn-danger" 
+                            class="btn btn-sm btn-outline-danger" 
                             data-bs-toggle="modal" 
                             data-bs-target="#deleteModal" 
                             data-id="{{ $vehicule->id }}" 
                             data-nom="{{ $vehicule->marque }} {{ $vehicule->modele }} {{ $vehicule->immatriculation }}">
-                            🗑️ Supprimer
+                            🗑️
                         </button>
                     </td>
                     <!-- Modal de suppression -->

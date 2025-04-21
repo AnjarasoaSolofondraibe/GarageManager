@@ -10,9 +10,9 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::with('vehicules')->paginate(10);
+        $clients = Client::with('vehicules')->get();
         
-        return response()->json($clients);
+        return response()->json($clients, 200);
     }
 
     //  Enregistre un nouveau client
@@ -28,18 +28,30 @@ class ClientController extends Controller
 
         Client::create($request->all());
 
-        return redirect()->route('clients.index')->with('success', 'Client ajouté avec succès.');
+        return response()->json(['message' => 'Client enregistré avec succès.'], 201);
     }
 
     //  Affiche un client (optionnel)
-    public function show(Client $client)
+    public function show($id)
     {
-        return response()->json($client);
+        $client = Client::with('vehicules')->findOrFail($id);
+        
+        if(!$client) {
+            return response()->json(['message' => 'Client non trouvé'], 404);
+        }
+
+        return response()->json($client, 200);
     }
 
     //  Met à jour les infos
-    public function update(Request $request, Client $client)
+    public function update(Request $request, $id)
     {
+        $client = Client::with('vehicules')->findOrFail($id);
+
+        if(!$client) {
+            return response()->json(['message' => 'Client non trouvé'], 404);
+        }
+
         $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -50,19 +62,21 @@ class ClientController extends Controller
 
         $client->update($request->all());
 
-        return redirect()->route('clients.index')->with('success', 'Client mis à jour.');
+        return response()->json($client, 200);
     }
 
     // Supprime un client
-    public function destroy(Client $client)
+    public function destroy($id)
     {
+        $client = Client::with('vehicules')->findOrFail($id);
+
         if ($client->vehicules()->count() > 0) {
-            return redirect()->route('clients.index')->with('error', 'Impossible de supprimer ce client. Il possède encore des véhicules.');
+            return response()->json(['error'=>'Impossible de supprimer ce client. Il possède encore des véhicules.'],500);
         }
     
         $client->delete();
     
-        return redirect()->route('clients.index')->with('success', 'Client supprimé avec succès.');
+        return response()->json(['message' => 'Client supprimé avec succès.'], 200);
     }
 
 
@@ -71,6 +85,7 @@ class ClientController extends Controller
         // charge les véhicules du client
         $vehicules = $client->vehicules()->latest()->get();
 
-        return view('clients.vehicules', compact('client', 'vehicules'));
+        //return view('clients.vehicules', compact('client', 'vehicules'));
+        return response()->json($vehicules, 200);
     }
 }

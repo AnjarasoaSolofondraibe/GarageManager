@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicule;
 use App\Models\Reparation;
-use App\Models\Employee;
+use App\Models\Employe;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -16,16 +16,23 @@ class ReparationController extends Controller
         return view('reparations.vehicule', compact('vehicule', 'reparations'));
     }
 
-    public function index()
+    public function index() {
+        $vehicules = Vehicule::with('reparations.mecaniciens')->get();
+
+        return view('reparations.index', compact('vehicules'));
+    }
+
+    public function en_cours()
     {
-        $vehicule = Vehicule::with('reparations.mecaniciens')->all();
-        return view('reparations.index', compact('vehicule'));
+        $vehicule = Vehicule::with('reparations')->get();
+        $reparations = Reparation::where('status','en_cours')->get();
+        return view('reparations.index', compact('reparations', 'vehicule'));
     }
 
     public function create()
     {
         $vehicules = Vehicule::with('client')->orderBy('immatriculation')->get();
-        $mecaniciens = Employee::where('poste', 'Mécanicien')->get();
+        $mecaniciens = Employe::where('poste', 'Mécanicien')->get();
         return view('reparations.create', compact('vehicules', 'mecaniciens'));
     }
 
@@ -48,7 +55,7 @@ class ReparationController extends Controller
     {
         $reparation = Reparation::with('mecaniciens')->findOrFail($id);
         $vehicules = Vehicule::all(); // si tu veux permettre de changer le véhicule
-        $mecaniciens = Mecanicien::all();
+        $mecaniciens = Employe::all();
 
         return view('reparations.edit', compact('reparation', 'vehicules', 'mecaniciens'));
     }

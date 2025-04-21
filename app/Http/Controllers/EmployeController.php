@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
+use App\Models\Employe;
+use App\Models\Specialite;
 use Illuminate\Http\Request;
 
-class EmployeeController extends Controller
+class EmployeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::all();
-        return view('employees.index', compact('employees'));
+        $employes = Employe::with('specialites')->paginate(10);
+        
+        return view('employes.index', compact('employes'));
     }
 
     /**
@@ -25,7 +27,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employees.create');
+        return view('employes.create');
     }
 
     /**
@@ -39,12 +41,12 @@ class EmployeeController extends Controller
         $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'email' => 'required|email|unique:employees',
+            'email' => 'nullable|email|unique:employes',
             'date_embauche' => 'required|date', 
         ]);
 
-        Employee::create($request->all());
-        return redirect()->route('employees.index')->with('success', 'Employé ajouté');
+        Employe::create($request->all());
+        return redirect()->route('employes.index')->with('success', 'Employé ajouté');
     }
 
     /**
@@ -53,7 +55,7 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Employee $employee)
+    public function show(Employe $employe)
     {
         //
     }
@@ -64,29 +66,32 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employee $employee)
+    public function edit($id)
     {
-        return view('employees.edit', compact('employee'));
+        $employe = Employe::with('specialites')->findOrFail($id);
+        $specialites = Specialite::all(); // 🔹 à ajouter
+
+        return view('employes.edit', compact('employe', 'specialites'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Employee  $employee
+     * @param  \App\Models\Employe  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, Employe $employe)
     {
         $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'email' => 'required|email|unique:employees',
             'date_embauche' => 'required|date', 
         ]);
 
-        $employee->update($request->all());
-        return redirect()->route('employees.index')->with('success', 'Employé modifié');
+        $employe->update($request->all());
+        $employe->specialites()->sync($request->specialites);
+        return redirect()->route('employes.index')->with('success', 'Employé modifié');
     }
 
     /**
@@ -95,9 +100,9 @@ class EmployeeController extends Controller
      * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employe $employe)
     {
-        $employee->delete();
-        return redirect()->route('employees.index')->with('success','Employé supprimé');
+        $employe->delete();
+        return redirect()->route('employes.index')->with('success','Employé supprimé');
     }
 }

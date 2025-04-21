@@ -14,14 +14,15 @@ class ReparationController extends Controller
     public function vehiculeReparations(Vehicule $vehicule)
     {
         $reparations = $vehicule->reparations; // si la relation est bien définie
+
         return response()->json($reparations);
     }
 
     public function index()
     {
-        $vehicule = Vehicule::with('reparations.mecaniciens')->all();
+        $vehicule = Vehicule::with('reparations')->all();
         
-        return response()->json($vehicule);
+        return response()->json($vehicule, 200);
     }
 
     public function store(Request $request)
@@ -34,18 +35,19 @@ class ReparationController extends Controller
         ]);
 
         $reparation = Reparation::create($request->all());
+        
         $reparation->mecaniciens()->sync($request->mecaniciens);
 
-        return redirect()->route('reparations.index')->with('success', 'Réparation enregistrée.');
+        return response()->json(['success', 'Réparation enregistrée.'],201);
     }
 
-    public function showEmployee($id)
+    public function showWithEmploye($id)
     {
         $reparation = Reparation::with('employée')->whereHas('employee', function($query) {
             $query->whereIn('poste',['mecanicien','electricien','peintre','tolier']);
         })->get();
 
-        return response()->json($reparation);
+        return response()->json($reparation, 200);
     }
 
     public function update(Request $request, $id)
@@ -68,7 +70,7 @@ class ReparationController extends Controller
     }
 
 
-    public function show()
+    public function showVehicules()
     {
         $vehicules = Vehicule::whereHas('reparations', function ($query) {
             $query->where('etat', 'en cours');

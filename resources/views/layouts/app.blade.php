@@ -33,17 +33,13 @@
                         </li>
     
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('reparations*') ? 'active' : '' }}" href="{{ route('reparations.create') }}">
+                            <a class="nav-link {{ request()->is('reparations*') ? 'active' : '' }}" href="{{ route('reparations.index') }}">
                                  Réparations
                             </a>
                         </li>
-    
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('mecaniciens*') ? 'active' : '' }}" href="{{ route('mecaniciens.index') }}">Mécaniciens</a>
-                        </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('mecaniciens*') ? 'active' : '' }}" href="{{ route('employees.index') }}">Employées</a>
+                            <a class="nav-link {{ request()->is('employes*') ? 'active' : '' }}" href="{{ route('employes.index') }}">Employées</a>
                         </li>
 
                         <li class="nav-item">
@@ -57,6 +53,32 @@
     
                     </ul>
                 </div>
+                <!-- Liens à droite : Connexion / Déconnexion -->
+                <ul class="navbar-nav ms-auto">
+                    @guest
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">Inscription</a>
+                        </li>
+                    @else
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url('/admin') }}">Administration</a></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button class="dropdown-item" type="submit">Déconnexion</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @endguest
+                </ul>
             </div>
         </nav>
     
